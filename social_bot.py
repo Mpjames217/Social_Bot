@@ -1,15 +1,13 @@
 #smtp: simple Mail Transfer Protocol
-import smtplib, random, datetime, calendar, imapclient, pyzmail
+import smtplib, random, datetime, calendar, imapclient, pyzmail, os, json
 
-#Populate User-Specific Variables CHANGE AS REQUIRED - NOTE the password must be an app password. See Google documentation for more info: https://support.google.com/accounts/answer/185833?hl=en
+#NOTE the password must be an app password. See Google documentation for more info: https://support.google.com/accounts/answer/185833?hl=en
 
-print('Please enter email address to be used:')
-emailAddress = input()
+emailAddress = os.environ['USERNAME']
+password = os.environ['APP_PASSWORD']
+recipientList = os.environ.get('RECIPIENT_LIST').split(' ')
+print (recipientList)
 
-print('Now enter the app password for this account. NOTE: the password must be an app password. See Google documentation for more info: https://support.google.com/accounts/answer/185833?hl=en')
-password = input()
-
-recipientList = ['Joe.Bloggs123@gmail.com']
 
 #populate datetime and calendar variables
 today = datetime.date.today()
@@ -94,7 +92,6 @@ def canvasResponces():
     for UID in UIDs:
         rawMessage = conn.fetch([UID], ['BODY[]', 'FLAGS'])
         message = pyzmail.PyzMessage.factory(rawMessage[UID][b'BODY[]'])
-        print(message.get_subject() + ': ' + monthName + ' social!')
         if message.get_subject() == monthName + ' social!':
             headCount += 1
 
